@@ -1,0 +1,30 @@
+.nav-space {
+  margin-left: 5px;
+}
+.user-title{
+  margin-top:10px;
+}
+.form-icon-container .form-icon {
+  position: absolute;
+  top: 12px;
+  left: 1rem;
+}
+.form-icon-label {
+  margin-left:35px;
+}
+.big-form-icon{
+  font-size: 20px !important;
+  height:1em;
+  top:1.0625rem;
+  position:absolute;
+  left:1rem;
+  vertical-align: -0.125em;
+}
+
+.big-row-form{
+  margin-top:5px;
+  margin-bottom: 5px;
+}
+.form-floating>input.form-icon-input{
+  padding-left:50px;
+}
