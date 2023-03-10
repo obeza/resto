@@ -6,6 +6,8 @@ import {
   ClipboardOutline, CreateOutline
 } from '@vicons/ionicons5'
 import { useRouter,useRoute } from 'vue-router';
+import Statut from './components/Statut.vue'
+import LayoutAdmin from '../layouts/LayoutAdmin.vue';
 
 const loading = ref(false)
 const restos = ref([])
@@ -30,6 +32,7 @@ axiosClient.get('/restos')
 </script>
 
 <template>
+  <LayoutAdmin>
   <n-card title="Restaurants" class="HeaderRubrique">
     <div>
       
@@ -59,7 +62,7 @@ axiosClient.get('/restos')
         <tbody v-if="restos" class="tbody">
           <tr v-for="resto in filterRestos" :key="resto.id">
             <th>{{  resto.nom }}</th>
-            <th>{{  resto.actif }}</th>
+            <th><Statut :actif="resto.actif"/></th>
             <th>{{  resto.dt_abon }}</th>
             <th>
               <div class="textAlignCenter">
@@ -94,7 +97,7 @@ axiosClient.get('/restos')
       </n-table>
 
   </n-card>
-
+</LayoutAdmin>
 </template>
 
 <style scoped>

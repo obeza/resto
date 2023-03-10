@@ -11,6 +11,7 @@ import Rubriques from './menu/Rubriques.vue'
 import Articles from './menu/articles.vue'
 import ArticlesCreate from './menu/ArticlesCreate.vue'
 import ArticlesUpdate from './menu/ArticlesUpdate.vue'
+import NotFound from './NotFound.vue'
 
 const routes = [
   //{ name: 'home', path: '/', component: Home},
@@ -67,7 +68,16 @@ const routes = [
     meta: {requiresAuth: true}
   },
   { name: 'utilisateurs', path: '/utilisateurs', component: Utilisateurs},
-  { name: 'login', path: '/login', component: Login }
+  { name: 'login', path: '/login', component: Login },
+  {
+    name: 'PageNotFound',
+    path: '/404',
+    component: NotFound
+  },
+  {
+    path: '/:catchAll(.*)',
+    redirect: '/404'
+  }
 ]
 
 const router = VueRouter.createRouter({

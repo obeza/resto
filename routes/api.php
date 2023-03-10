@@ -35,3 +35,7 @@ Route::resource('rubriques/{rubrique_id}/articles',ArticleController::class)->mi
 
 // fonction ajouter dans ArticleController pour mettre a jour l'ordre des articles
 Route::post('/articles/liste', [ArticleController::class, 'updateListeOrder'])->name('articles.liste')->middleware('auth:sanctum');
+
+// upload photo pour les articles du menu
+Route::post('/articles/upload/{id}', [ArticleController::class, 'uploadPicture'])->name('articles.upload')->middleware('auth:sanctum');
+Route::post('/articles/upload/{id}/remove', [ArticleController::class, 'uploadPictureRemove'])->middleware('auth:sanctum');

@@ -7,6 +7,7 @@ import {
   EllipsisVertical, Pencil, ClipboardOutline, StatsChartOutline
 } from '@vicons/ionicons5'
 import store from './../store'
+import LayoutAdmin from '../layouts/LayoutAdmin.vue'
 
 interface RubriqueValue {
   id?:any,
@@ -146,6 +147,21 @@ const onPositiveClick = ()=>{
 
 </script>
 <template>
+  <LayoutAdmin>
+    <n-card>
+    <n-breadcrumb>
+      <n-breadcrumb-item>
+        <router-link :to="{ name:'restos' }">
+          Restaurants
+        </router-link>
+      </n-breadcrumb-item>
+      <n-breadcrumb-item>
+        <router-link :to="{ name:'menu', params: { restoId } }">
+          {{ restoNom }}
+        </router-link>
+      </n-breadcrumb-item>
+    </n-breadcrumb>
+  </n-card>
   <n-card>
     <h1>Menu du restaurant : {{  restoNom }}</h1>
     <h3>Liste des rubriques</h3>
@@ -163,7 +179,7 @@ const onPositiveClick = ()=>{
     
     <div class="draggle" :key="index">
       <div class="spaceIcon">
-        <span class="alignCenter"><n-icon size="30"><ellipsis-vertical/></n-icon> {{  element.titre }} -{{  element.id }}</span>
+        <span class="alignCenter"><n-icon size="30"><ellipsis-vertical/></n-icon> {{  element.titre }}</span>
         <span class="alignCenter">
           <n-icon size="24" v-on:click="modifierTitre(element.id)"><pencil/></n-icon>
           <n-icon size="24"><router-link :to="{ name:'articles', params: { rubriqueId:element.id}}"><clipboard-outline/></router-link></n-icon>
@@ -198,7 +214,7 @@ const onPositiveClick = ()=>{
       </form>
     </n-card>
   </n-modal>
-
+</LayoutAdmin>
 </template>
 
 <style>

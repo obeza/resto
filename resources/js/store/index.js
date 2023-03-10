@@ -10,7 +10,8 @@ const store = createStore({
       resto: "",
       rubrique: "",
       article: ""
-    }
+    },
+    BaseUrl:""
   }
 });
 

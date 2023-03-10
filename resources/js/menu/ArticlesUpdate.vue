@@ -1,4 +1,5 @@
 <template>
+  <LayoutAdmin>
   <n-card>
     <n-breadcrumb>
       <n-breadcrumb-item>
@@ -51,6 +52,22 @@
             maxlength="500"
           />
         </n-form-item>
+
+        <n-upload
+          :action="`/api/articles/upload/${articleId}`"
+          :headers="{
+            'Authorization': `Bearer ${store.state.user.token}`
+          }"
+          list-type="image-card"
+          :max="1"
+          name="picture"
+          :default-file-list="formValue.picture"
+          :on-remove="supprimerPhoto"
+        >
+        Envoyer une photo
+        </n-upload>
+        <n-divider/>
+
         <n-form-item label="Prix" path="prix">
           <n-input-number 
             v-model:value="formValue.prix"
@@ -66,9 +83,10 @@
             :options="list.options"
           />
         </n-form-item>
-        <n-button type="info" attr-type="submit">Ajouter</n-button>
+        <n-button type="info" attr-type="submit">Modifier</n-button>
   </n-form>
   </n-card>
+</LayoutAdmin>
 </template>
 
 <script setup lang="ts">
@@ -76,14 +94,17 @@ import { ref, toRefs, PropType } from 'vue'
 import { useRouter,useRoute } from 'vue-router';
 //import ArticleForm from './components/ArticleForm.vue'
 import axiosClient from './../axios'
-import { NForm, FormInst, NInput, NSelect, NInputNumber } from 'naive-ui'
+import { NForm, FormInst, NInput, NSelect, NInputNumber, NUpload, NDivider } from 'naive-ui'
 import store from './../store'
+import type { UploadFileInfo } from 'naive-ui';
+
+import LayoutAdmin from '../layouts/LayoutAdmin.vue';
 
 interface Tag {
   id: number
   titre: string
 }
-
+const BaseUrl = store.state.BaseUrl
 const router = useRouter();
 // const props = defineProps({
 //   rubriqueId: Number
@@ -111,6 +132,7 @@ const formValue= ref({
   titre: '',
   resume: '',
   contenu: '',
+  picture: ref<UploadFileInfo[]>([]),
   prix: 0,
   tags: []
 })
@@ -128,10 +150,13 @@ const list = ref({
   ]
 })
 
+//const baseUrlAction = ref('/api/articles/8/upload')
+
 // get l'article data
 // console.log( 'reubriqueId ' + JSON.stringify(rubriqueId ))
 console.log(`get -> /rubriques/${rubriqueId}/articles/${articleId}`)
 const baseUrl = `/rubriques/${rubriqueId}/articles/${articleId}`
+const baseUrlAction = ref(baseUrl)
 axiosClient.get( baseUrl + '/edit' )
     .then(res => {
       console.log( "data article loaded : " + JSON.stringify(res.data ))
@@ -140,7 +165,16 @@ axiosClient.get( baseUrl + '/edit' )
       formValue.value.titre = article.titre
       formValue.value.resume = article.resume
       formValue.value.contenu = article.contenu
-      formValue.value.prix = Number(article.prix)
+      if (article.picture) {
+         formValue.value.picture.push({ 
+        id: '1',
+        name: 'photo',
+        status: 'finished',
+        url: `${BaseUrl}/storage/app/${article.picture}`
+      })
+    }
+      console.log(`${BaseUrl}/storage/app/${article.picture}`)
+        formValue.value.prix = Number(article.prix)
       formValue.value.tags = article.tags
     })
 
@@ -158,10 +192,12 @@ function handleForm (){
   formRef.value?.validate(async (errors) => {
     if (!errors ){
       try {
+        console.log('picture ' + formValue.value.picture)
             const { data } = await axiosClient.put( baseUrl, {
               titre: formValue.value.titre,
               resume: formValue.value.resume,
               contenu: formValue.value.contenu,
+              // picture: formValue.value.picture[0],
               prix: formValue.value.prix,
               tags: formValue.value.tags
           });
@@ -179,5 +215,14 @@ function handleForm (){
     }
   })
 }
+
+function supprimerPhoto(){
+  console.log('remove ' )
+  axiosClient.post( `/articles/upload/${articleId}/remove` )
+  .then( res =>{
+    console.log('remove ' + res)
+  })
+}
+
 </script>
 

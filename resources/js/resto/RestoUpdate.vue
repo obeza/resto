@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import axiosClient from '../axios'
-import { NButton, NSpace, NForm, FormInst, NCard, NInput, NFormItem, NSwitch, NBreadcrumb, NBreadcrumbItem } from 'naive-ui'
+import { NButton, NSpace, NForm, FormInst, NCard, NInput, NFormItem, NSwitch, NBreadcrumb, NBreadcrumbItem, frFR, dateFrFR } from 'naive-ui'
 //import RestoForm from './RestoForm.vue'
 import { useRouter,useRoute } from 'vue-router';
+import LayoutAdmin from '../layouts/LayoutAdmin.vue';
+import type { NLocale, NDateLocale } from 'naive-ui'
+
 
 //const baseurl = `${import.meta.env.VITE_URL_API}`;
 
@@ -19,6 +22,9 @@ const formValue= ref({
   dt_abon: ref(0),
   actif: ref(true)
 })
+
+const locale = ref<NLocale | null>(frFR)
+const dateLocale = ref<NDateLocale | null>(dateFrFR)
 
 const formRef = ref<FormInst | null>(null);
 // const getToken = async() => {
@@ -106,6 +112,7 @@ const handleAdd = async() => {
 </script>
 
 <template>
+  <LayoutAdmin>
   <n-card class="HeaderRubrique">
     <n-breadcrumb>
       <n-breadcrumb-item>
@@ -172,11 +179,13 @@ const handleAdd = async() => {
           />
         </n-form-item>
         <n-form-item label="Abonnement" path="dt_abon">
+          <n-config-provider :locale="locale" :date-locale="dateLocale">
           <n-date-picker 
             v-model:value="formValue.dt_abon"
             type="date"
             value-format="dd/MM/yyyy"            
           />
+        </n-config-provider>
         </n-form-item>
         <n-form-item label="Actif" path="actif">
           <n-switch 
@@ -191,5 +200,5 @@ const handleAdd = async() => {
   </n-card>
   
   <!-- <pre>{{  JSON.stringify(formValue) }}</pre> -->
-  
+  </LayoutAdmin>
 </template>

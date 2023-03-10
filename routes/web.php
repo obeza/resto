@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AuthController;
 // use App\Http\Controllers\UserController; 
- 
+// use App\Http\Controllers\RubriqueController; 
 // use App\Http\Controllers\RestoController; 
 // use App\Http\Controllers\UserApiController; 
 
@@ -20,7 +20,8 @@ use App\Http\Controllers\AuthController;
 |
 */
 
-Route::get('/', [AuthController::class, 'dashboard']); 
+Route::get('/{any}', [AuthController::class, 'dashboard'])->where('any','.*'); 
+
 // Route::get('login', [AuthController::class, 'index'])->name('login');
 // Route::post('login', [AuthController::class, 'customLogin'])->name('login.post'); 
 // //Route::get('registration', [AuthController::class, 'registration'])->name('register-user');

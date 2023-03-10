@@ -18,7 +18,8 @@ class Article extends Model
         'resume',
         'contenu',
         'prix',
-        'ordre'
+        'ordre',
+        'picture'
     ];
 
     public function tags(){

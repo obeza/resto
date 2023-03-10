@@ -1,6 +1,8 @@
 import axios from "axios"
 import store from "./../store"
 
+store.state.BaseUrl = 'http://192.168.1.38:5173'
+
 const axiosClient = axios.create({
   baseURL: `${import.meta.env.VITE_URL_API}/api`
 })

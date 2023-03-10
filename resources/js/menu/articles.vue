@@ -1,4 +1,5 @@
 <template>
+  <LayoutAdmin>
   <n-card>
     <n-breadcrumb>
       <n-breadcrumb-item>
@@ -57,7 +58,7 @@
   </n-card>
   
   
-  
+</LayoutAdmin>
 </template>
 
 
@@ -71,6 +72,7 @@ import {
   EllipsisVertical, CreateOutline, ClipboardOutline, StatsChartOutline
 } from '@vicons/ionicons5'
 import store from './../store'
+import LayoutAdmin from '../layouts/LayoutAdmin.vue';
 
 //
 

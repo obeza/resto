@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('titre');
             $table->text('resume',500)->nullable();
             $table->text('contenu',500)->nullable();
+            $table->string('picture')->nullable();
             $table->decimal('prix')->default(0);
             $table->integer('ordre')->default(0);
             $table->softDeletes();

@@ -4,6 +4,7 @@ import { useRouter,useRoute } from 'vue-router';
 //import ArticleForm from './components/ArticleForm.vue'
 import axiosClient from './../axios'
 import { NForm, FormInst, NInput, NSelect, NInputNumber } from 'naive-ui'
+import LayoutAdmin from '../layouts/LayoutAdmin.vue';
 
 interface Tag {
   id: number
@@ -88,7 +89,7 @@ function handleForm (){
 </script>
 
 <template>
-
+  <LayoutAdmin>
     <n-card>
     <n-breadcrumb>
       <n-breadcrumb-item>
@@ -157,4 +158,5 @@ function handleForm (){
         <n-button type="info" attr-type="submit">Ajouter</n-button>
   </n-form>
   </n-card>
+</LayoutAdmin>
 </template>

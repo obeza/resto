@@ -8,6 +8,7 @@ use App\Models\Rubrique;
 use App\Models\Tag;
 use Illuminate\Support\facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ArticleController extends Controller
 {
@@ -83,15 +84,15 @@ class ArticleController extends Controller
         //$article = Article::select('titre','resume','contenu','prix')->where('id', $articleId)->with(['tags'])->firstOrFail();
         //$tags = Tag::select('id')->get();
 
-        $article = Article::with('tags')->findOrFail($articleId);
+        // $article = Article::with('tags')->findOrFail($articleId);
 
-        return response()->json([
-            'titre' => $article->titre,
-            'resume' => $article->resume,
-            'contenu' => $article->contenu,
-            'prix' => $article->prix,
-            'tags' => $article->tags->pluck('id')
-        ]);
+        // return response()->json([
+        //     'titre' => $article->titre,
+        //     'resume' => $article->resume,
+        //     'contenu' => $article->contenu,
+        //     'prix' => $article->prix,
+        //     'tags' => $article->tags->pluck('id')
+        // ]);
     }
 
     /**
@@ -109,6 +110,7 @@ class ArticleController extends Controller
             'titre' => $article->titre,
             'resume' => $article->resume,
             'contenu' => $article->contenu,
+            'picture' => $article->picture,
             'prix' => $article->prix,
             'tags' => $article->tags->pluck('id')
         ]);
@@ -128,6 +130,7 @@ class ArticleController extends Controller
         $request->validate([
             'titre' => 'required|string|max:255'
         ]);
+
         
         $article->update([
             'titre' => $request->titre,
@@ -159,5 +162,38 @@ class ArticleController extends Controller
         $result = DB::update( DB::raw($req) );
 
         return response()->json( ['Article updateListeOrder' => $liste] );
+    }
+
+    public function uploadPicture( Request $request, $id)
+    {
+        if ($request->has("picture")) {
+            $article = Article::findOrFail($id);
+
+            if ($article->picture){
+                Storage::delete($article->picture);
+            }
+            
+            $chemin_image = $request->picture->store("articles");
+            
+            $article->update([
+                'picture' => isset($chemin_image) ? $chemin_image : $article->picture
+            ]);
+
+        }
+        
+        return response()->json( ['message' => 'ok'] );
+    }
+
+    public function uploadPictureRemove( Request $request, $id)
+    {
+        $article = Article::findOrFail($id);
+        if ($article->picture){
+            Storage::delete($article->picture);
+        }
+        $article->picture = null;
+        $article->update([
+            'picture' => isset($chemin_image) ? $chemin_image : $article->picture
+        ]);
+        return response()->json( ['message' => 'ok'] );
     }
 }
