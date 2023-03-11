@@ -2,9 +2,10 @@
 import { ref, toRefs, PropType } from 'vue'
 import { useRouter,useRoute } from 'vue-router';
 //import ArticleForm from './components/ArticleForm.vue'
-import axiosClient from './../axios'
+import axiosClient from './../../axios/index'
 import { NForm, FormInst, NInput, NSelect, NInputNumber } from 'naive-ui'
 import LayoutAdmin from '../layouts/LayoutAdmin.vue';
+import store from './../../store/index'
 
 interface Tag {
   id: number
@@ -20,6 +21,7 @@ const router = useRouter();
 const route = useRoute()
 const rubriqueId = ref(route.params.rubriqueId)
 const restoId = ref(route.params.restoId)
+const rubriqueNom = ref(store.state.nav.rubrique)
 
 const rules = ref({
   titre: {

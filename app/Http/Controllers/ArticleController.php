@@ -149,9 +149,14 @@ class ArticleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id, Article $article)
     {
         //
+        $article->deleted_at = now();
+        $article->deleted_by = Auth::id();
+        $article->save();
+
+        return response()->json( ['message' => 'destroy'] );
     }
 
     public function updateListeOrder(Request $request)

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
-import { NCard, NButton, NTable, NIcon, NTooltip } from 'naive-ui'
-import axiosClient from './../axios'
+import { ref, computed } from 'vue'
+import { NCard, NButton, NTable, NIcon } from 'naive-ui'
+import axiosClient from './../../axios/index'
 import {
   ClipboardOutline, CreateOutline
 } from '@vicons/ionicons5'

@@ -1,5 +1,6 @@
 import _ from 'lodash';
 window._ = _;
+window.baseUrl = 'http://192.168.1.38:5173'
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -7,7 +8,7 @@ window._ = _;
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
-import axios from 'axios';
+import axios from './axios/index';
 window.axios = axios;
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';

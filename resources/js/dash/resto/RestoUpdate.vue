@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import axiosClient from './../axios'
-import { NButton, NSpace, NForm, FormInst, NCard, frFR, dateFrFR } from 'naive-ui'
-import RestoForm from './RestoForm.vue'
+import axiosClient from './../../axios/index'
+import { NButton, NSpace, NForm, FormInst, NCard, NInput, NFormItem, NSwitch, NBreadcrumb, NBreadcrumbItem, frFR, dateFrFR } from 'naive-ui'
+//import RestoForm from './RestoForm.vue'
+import { useRouter,useRoute } from 'vue-router';
 import LayoutAdmin from '../layouts/LayoutAdmin.vue';
+import type { NLocale, NDateLocale } from 'naive-ui'
+
 
 //const baseurl = `${import.meta.env.VITE_URL_API}`;
 
@@ -16,12 +19,12 @@ const formValue= ref({
   email: '',
   adresse: '',
   commentaire: '',
-  dt_abon: ref(1183135260000),
+  dt_abon: ref(0),
   actif: ref(true)
 })
 
-const locale = ref(frFR)
-const dateLocale = ref(dateFrFR)
+const locale = ref<NLocale | null>(frFR)
+const dateLocale = ref<NDateLocale | null>(dateFrFR)
 
 const formRef = ref<FormInst | null>(null);
 // const getToken = async() => {
@@ -57,21 +60,46 @@ const rules = ref({
 
 })
 
+const router = useRouter();
+const route = useRoute()
+const rubriqueId = ref(route.params.rubriqueId)
+const restoId = ref(route.params.restoId)
+const loading = ref(true)
+// get data du resto
+
+const baseUrl = `/restos/${restoId.value}`
+console.log( baseUrl )
+axiosClient.get( baseUrl + '/edit' )
+    .then(res => {
+      console.log( "data resto loaded : " + JSON.stringify(res.data ))
+      //state.articles = res.data.articles
+      loading.value = false
+      let resto = res.data
+      formValue.value.nom = resto.nom
+      formValue.value.tel = resto.tel
+      formValue.value.email = resto.email
+      formValue.value.adresse = resto.adresse
+      formValue.value.commentaire = resto.commentaire
+      formValue.value.dt_abon = formatDate( resto.dt_abon )
+      formValue.value.actif = resto.actif
+    })
+
+function formatDate(date){
+  let dt = date.split("-")
+  dt = new Date(dt[0], dt[1]-1,dt[2])
+  return ref(dt.getTime(dt))
+}
+    
 const handleAdd = async() => {
-  console.log('formValue')
   console.log ( 'formValue :' + JSON.stringify(formValue.value))
   formRef.value?.validate(async (errors) => {
     if (!errors){
-      //await getToken();
-
       try {
-        const { data } = await axiosClient.post( '/restos' , formValue.value );
-        console.log('data get')
-        console.log( JSON.stringify( data ) );
-
+        const { data } = await axiosClient.put( baseUrl , formValue.value );
+        console.log( 'data get ' + JSON.stringify( data ) );
+        router.push({name:'restos' });
       } catch(error) {
-        console.log('error ....')
-        console.log( JSON.stringify(error.response.data))
+        console.log( 'error .... ' + JSON.stringify(error.response.data))
       }
 
     } else {
@@ -85,11 +113,17 @@ const handleAdd = async() => {
 
 <template>
   <LayoutAdmin>
-  <n-card title="Ajouter un restaurant" class="HeaderRubrique">
-    <div>
-      <router-link to="/restos">Restaurants</router-link>
-      / Ajouter un restaurant
-    </div>
+  <n-card class="HeaderRubrique">
+    <n-breadcrumb>
+      <n-breadcrumb-item>
+        <router-link :to="{ name:'restos' }">
+          Restaurants
+        </router-link>
+      </n-breadcrumb-item>
+      <n-breadcrumb-item>
+          Modifier un restaurant
+      </n-breadcrumb-item>
+    </n-breadcrumb>
   </n-card>
   <n-card>
 
@@ -100,8 +134,8 @@ const handleAdd = async() => {
         :rules="rules"
       >
         <!-- <RestoForm
-          :nom="formValue.nom"
-          :tel="formValue.tel"
+          v-model:nom="formValue.nom"
+          v-model:tel="formValue.tel"
           v-model:email="formValue.email"
           v-model:adresse="formValue.adresse"
           v-model:commentaire="formValue.commentaire"
@@ -119,7 +153,6 @@ const handleAdd = async() => {
         <n-form-item label="Tel : (+123 456 123456)" path="tel">
           <n-input 
             v-model:value="formValue.tel" 
-
             type="text"
             placeholder="+123 456 123456" 
             pattern="[+]{1}[0-9]{3} [0-9]{3} [0-9]{6}"
@@ -130,7 +163,6 @@ const handleAdd = async() => {
           <n-input 
             v-model:value="formValue.email" 
             type="text" 
-
           />
         </n-form-item>
         <n-form-item label="Adresse" path="adresse">
@@ -144,7 +176,6 @@ const handleAdd = async() => {
           <n-input 
             v-model:value="formValue.commentaire" 
             type="textarea" 
-
           />
         </n-form-item>
         <n-form-item label="Abonnement" path="dt_abon">
@@ -152,9 +183,7 @@ const handleAdd = async() => {
           <n-date-picker 
             v-model:value="formValue.dt_abon"
             type="date"
-
-            value-format="dd/MM/yyyy"
-            
+            value-format="dd/MM/yyyy"            
           />
         </n-config-provider>
         </n-form-item>
@@ -164,12 +193,12 @@ const handleAdd = async() => {
 
           />
         </n-form-item>
-        <n-button type="info" attr-type="submit">Ajouter</n-button>
+        <n-button type="info" attr-type="submit">Modifier</n-button>
         
       </n-form>
 
   </n-card>
   
   <!-- <pre>{{  JSON.stringify(formValue) }}</pre> -->
-</LayoutAdmin>
+  </LayoutAdmin>
 </template>

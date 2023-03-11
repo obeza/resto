@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { NCard, NButton, NSpace, NInput, NFormItem, NForm, FormInst, NAlert } from 'naive-ui'
-import axiosClient from './axios';
+import { NCard, NButton, NSpace, NInput, NFormItem, NForm, FormInst, NAlert, NGrid, NGridItem } from 'naive-ui'
+import axiosClient from './../axios/index';
 import { useRouter } from 'vue-router';
-import store from './store'
+//import store from './../store/index.js'
+import useAuthStore from './../store/auth'
 
 //const baseurl = `${import.meta.env.VITE_URL_API}`;
 //console.log( import.meta.env )
 const router = useRouter();
 const formRef = ref<FormInst | null>(null);
+
+const authStore = useAuthStore()
 
 const formValue= ref({
   email: '',
@@ -35,23 +38,24 @@ const rules = ref({
 // };
 
 const handleLogin = async() => {
-  console.log ( JSON.stringify(formValue.value))
+  console.log ( 'hendleLogin ' + JSON.stringify(formValue.value))
   formRef.value?.validate(async (errors) => {
     if (!errors){
       //await getToken();
-
+      console.log('tentative login')
       try {
-        const { data } = await axiosClient.post( '/login' , {
-        email: formValue.value.email,
-        password: formValue.value.password
-      });
+          const { data } = await axiosClient.post( '/login' , {
+            email: formValue.value.email,
+            password: formValue.value.password
+          });
 
-      console.log( 'login OK ' + JSON.stringify( data ) );
-      store.state.user.token = data.token
+        console.log( 'login OK ' + JSON.stringify( data ) );
+        //store.state.user.token = data.token
+        authStore.setUser(data)
 
       router.push({name:'restos'});
       } catch (err){
-        console.log('error '+err)
+        console.log('error login '+err.reponse)
         errorCatch.value = true
       }
 
@@ -64,7 +68,10 @@ const handleLogin = async() => {
 
 </script>
 <template>
-  <n-card>
+  <div class="login-back">
+  <n-space justify="center"  class="login-space">
+
+  <n-card class="login">
     
       <h1>login</h1>
       <n-form 
@@ -88,7 +95,12 @@ const handleLogin = async() => {
             placeholder="Mot de passe"
           />
         </n-form-item>
-        <n-button type="info" attr-type="submit">Se connecter</n-button>
+        <n-button 
+          type="info" 
+          attr-type="submit"
+          size="large"
+          class="login-button"
+        >Se connecter</n-button>
         <n-alert title="Erreur de connexion" type="error" v-show="errorCatch">
         Email ou mot de passe incorrect !
       </n-alert>
@@ -96,6 +108,27 @@ const handleLogin = async() => {
       
 
   </n-card>
-  
-  
+
+</n-space>
+</div>
 </template>
+
+<style scoped>
+.login-back{
+  position: fixed;
+  width:100%;
+  height:100%;
+  background-color: #c0cccc;
+}
+.login-space{
+  
+}
+.login{
+  min-width: 400px;
+  margin-top: 70px;
+
+}
+.login-button{
+  width:100%;
+}
+</style>

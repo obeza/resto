@@ -21,6 +21,7 @@
         "@headlessui/vue": "^1.7.10",
         "@heroicons/vue": "^2.0.16",
         "@vitejs/plugin-vue": "^4.0.0",
+        "pinia": "^2.0.33",
         "sortablejs": "^1.15.0",
         "sortablejs-vue3": "^1.2.8",
         "vue": "^3.2.36",

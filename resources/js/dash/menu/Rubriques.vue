@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { ref, onMounted, defineProps, toRefs, computed, reactive } from 'vue'
 import { NCard, NIcon, NTable, numberAnimationProps } from 'naive-ui'
-import axiosClient from './../axios'
+import axiosClient from './../../axios/index'
 import { Sortable } from 'sortablejs-vue3'
 import {
   EllipsisVertical, Pencil, ClipboardOutline, StatsChartOutline
 } from '@vicons/ionicons5'
-import store from './../store'
+import store from './../../store/index'
 import LayoutAdmin from '../layouts/LayoutAdmin.vue'
 
 interface RubriqueValue {

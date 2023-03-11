@@ -19,14 +19,14 @@
   </n-card>
   <n-card>
     <h2>Rubrique : {{  rubriqueNom }}</h2>
-    <div>
-      
-    <n-button
-      type="info"
-      @click="router.push({ name:'article-create', params: { rubriqueId }})"
-    >Ajouter un article</n-button>
 
-    </div>
+    <n-space justify="end">  
+      <n-button
+        type="info"
+        @click="router.push({ name:'article-create', params: { rubriqueId }})"
+      >Ajouter un article</n-button>
+    </n-space>
+
   </n-card>
   <n-card class="article-list">
     <h3>liste des articles {{ rubriqueId }}</h3>
@@ -43,11 +43,13 @@
       <div class="spaceIcon">
         <span class="alignCenter"><n-icon size="30"><ellipsis-vertical/></n-icon> {{  element.titre }} -{{  element.id }}</span>
         <span class="alignCenter">
-          <n-icon 
-            size="24" 
-            v-on:click="router.push({name:'article-update', params:{restoId, rubriqueId, articleId:element.id} })"
-            ><create-outline/></n-icon>
-          
+          <n-button quaternary circle>
+      <template #icon>
+        <n-icon
+        @click="router.push({name:'article-update', params:{restoId, rubriqueId, articleId:element.id} })"
+        ><create-outline/></n-icon>
+      </template>
+    </n-button>
         </span>
       </div>
     </div>
@@ -65,13 +67,13 @@
 <script setup lang="ts">
 import { ref, onMounted, defineProps, toRefs, computed, reactive, } from 'vue'
 import { useRouter,useRoute } from 'vue-router';
-import axiosClient from './../axios'
-import { NButton,NCard, NIcon } from 'naive-ui'
+import axiosClient from './../../axios/index'
+import { NButton,NCard, NIcon, NSpace } from 'naive-ui'
 import { Sortable } from 'sortablejs-vue3'
 import {
   EllipsisVertical, CreateOutline, ClipboardOutline, StatsChartOutline
 } from '@vicons/ionicons5'
-import store from './../store'
+import store from './../../store/index'
 import LayoutAdmin from '../layouts/LayoutAdmin.vue';
 
 //

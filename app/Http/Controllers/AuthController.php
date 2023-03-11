@@ -38,7 +38,13 @@ class AuthController extends Controller
             $user = Auth::user();
             $token = $user->createToken(time())->plainTextToken;
 
-            return response()->json(['token'=> $token]);
+
+            return response()->json([
+                'prenom'=> $user->prenom,
+                'nom'=> $user->nom,
+                'role'=> $user->role,
+                'token'=> $token,
+            ]);
         }
   
         //return redirect("login")->withSuccess('Login details are not valid');

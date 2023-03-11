@@ -10,12 +10,15 @@
 import { defineComponent, h, Component } from 'vue'
 import { NIcon } from 'naive-ui'
 import type { MenuOption } from 'naive-ui'
-
+import { useRouter,useRoute } from 'vue-router';
 import { routeLocationKey, RouterLink } from 'vue-router'
 import {
   LaptopOutline as WorkIcon,
   LogOutOutline as HomeIcon
 } from '@vicons/ionicons5'
+
+
+
 
 function renderIcon (icon: Component) {
   return () => h(NIcon, null, { default: () => h(icon) })
@@ -56,14 +59,14 @@ const menuOptions: MenuOption[] = [
         RouterLink,
         {
           to: {
-            name: 'login'
+            name: 'logout'
           }
         },
-        { default: () => 'Login' }
+        { default: () => 'Se déconnecter' }
       ),
-    key: 'go-to-login',
+    key: 'logout',
     icon: renderIcon(HomeIcon)
-  },
+  }
 ]
 
 export default defineComponent({
@@ -73,6 +76,8 @@ export default defineComponent({
     }
   }
 })
+
+
 </script>
 
 <style>

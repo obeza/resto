@@ -1,5 +1,6 @@
 <template>
   <LayoutAdmin>
+    <!-- Top card -->
   <n-card>
     <n-breadcrumb>
       <n-breadcrumb-item>
@@ -18,11 +19,28 @@
           {{ rubriqueNom }}
         </router-link>
       </n-breadcrumb-item>
+      <n-breadcrumb-item> 
+        Modifier un article
+      </n-breadcrumb-item>
     </n-breadcrumb>
   </n-card>
+
+  <!-- Second card -->
   <n-card>
-    <h1>Modifier l'article {{  formValue.titre }}</h1>
+    <h2>Modifier l'article : {{  formValue.titre }}</h2>
+    <n-button
+        
+        @click="router.push({ name:'articles', params: { restoId, rubriqueId } })"
+      >
+      <template #icon>
+        <n-icon
+        ><arrow-back/></n-icon>
+      </template>
+      Revenir vers la liste des articles
+    </n-button>
   </n-card>
+
+  <!-- Form card -->
   <n-card>
   <n-form 
     ref="formRef"
@@ -83,9 +101,28 @@
             :options="list.options"
           />
         </n-form-item>
-        <n-button type="info" attr-type="submit">Modifier</n-button>
+        <n-space>
+          <n-button type="info" attr-type="submit">Modifier</n-button>
+          <n-button type="warning" @click="showModal=true">Supprimer</n-button>
+        </n-space>
+        
   </n-form>
   </n-card>
+
+  <!-- Modale de confirmation pour l'effacement -->
+
+  <n-modal
+    v-model:show="showModal"
+    :mask-closable="false"
+    preset="dialog"
+    title="Supprimer"
+    content="Etes-vous sur de vouloir continuer ?"
+    positive-text="Confirmer"
+    negative-text="Annuler"
+    @positive-click="supprimerArticle"
+    @negative-click="showModal=false"
+  />
+
 </LayoutAdmin>
 </template>
 
@@ -93,11 +130,13 @@
 import { ref, toRefs, PropType } from 'vue'
 import { useRouter,useRoute } from 'vue-router';
 //import ArticleForm from './components/ArticleForm.vue'
-import axiosClient from './../axios'
+import axiosClient from './../../axios/index'
 import { NForm, FormInst, NInput, NSelect, NInputNumber, NUpload, NDivider } from 'naive-ui'
-import store from './../store'
+import store from './../../store/index'
 import type { UploadFileInfo } from 'naive-ui';
-
+import {
+  ArrowBack
+} from '@vicons/ionicons5'
 import LayoutAdmin from '../layouts/LayoutAdmin.vue';
 
 interface Tag {
@@ -119,6 +158,7 @@ const articleId = route.params.articleId
 const rubriqueNom = ref(store.state.nav.rubrique)
 const restoNom = ref(store.state.nav.resto)
 
+const showModal = ref(false)
 const rules = ref({
   titre: {
     required: true,
@@ -222,6 +262,21 @@ function supprimerPhoto(){
   .then( res =>{
     console.log('remove ' + res)
   })
+}
+
+const supprimerArticle = async ()=> {
+
+
+  try {
+    const {data} = await axiosClient.delete( baseUrl , { id:1 })
+    {
+      console.log('delete ' + data)
+      router.push({ name:'articles', params: { restoId, rubriqueId } });
+    }
+
+  } catch (error){
+
+  }
 }
 
 </script>

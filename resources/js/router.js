@@ -1,23 +1,57 @@
 
 import * as VueRouter from 'vue-router'
-import store from './store'
+//import store from './store/index'
+import useAuthStore from './store/auth'
 
-import Restos from './resto/Restos.vue'
-import RestoCreate from './resto/RestoCreate.vue'
-import RestoUpdate from './resto/RestoUpdate.vue'
-import Utilisateurs from './utilisateur/Utilisateurs.vue'
-import Login from './Login.vue'
-import Rubriques from './menu/Rubriques.vue'
-import Articles from './menu/articles.vue'
-import ArticlesCreate from './menu/ArticlesCreate.vue'
-import ArticlesUpdate from './menu/ArticlesUpdate.vue'
+import Home from './Home.vue'
+
+//import Restos from './dash/resto/Restos.vue'
+const Restos = ()=> import('./dash/resto/Restos.vue')
+// import RestoCreate from './dash/resto/RestoCreate.vue'
+const RestoCreate = ()=> import('./dash/resto/RestoCreate.vue')
+// import RestoUpdate from './dash/resto/RestoUpdate.vue'
+const RestoUpdate = ()=> import('./dash/resto/RestoUpdate.vue')
+// import Utilisateurs from './dash/utilisateur/Utilisateurs.vue'
+const Utilisateurs = ()=> import('./dash/utilisateur/Utilisateurs.vue')
+//import Login from './dash/Login.vue'
+const Login = ()=> import('./dash/Login.vue')
+// import Rubriques from './dash/menu/Rubriques.vue'
+const Rubriques = ()=> import('./dash/menu/Rubriques.vue')
+// import Articles from './dash/menu/articles.vue'
+const Articles = ()=> import('./dash/menu/articles.vue')
+// import ArticlesCreate from './dash/menu/ArticlesCreate.vue'
+const ArticlesCreate = ()=> import('./dash/menu/ArticlesCreate.vue')
+// import ArticlesUpdate from './dash/menu/ArticlesUpdate.vue'
+const ArticlesUpdate = ()=> import('./dash/menu/ArticlesUpdate.vue')
+
+//
+//  Reseto : Karaoke
+//
+//const ShopKaraokeHome = ()=> import('./shop/karaoke/Home.vue')
+
+//
+import Logout from './dash/Logout.vue'
+
 import NotFound from './NotFound.vue'
 
+
 const routes = [
-  //{ name: 'home', path: '/', component: Home},
   { 
-    // liste des restos accessible par l'utilisateur
+    // home page guest
     path: '/', 
+    name: 'home',   
+    component: Home
+  },
+  // { 
+  //   // App Karaoke Bar
+  //   path: '/restos/karaoke/home', 
+  //   name: 'shop-karaoke',   
+  //   component: ShopKaraokeHome,
+  // },
+  { 
+    // liste des restos
+    // home de l'admin : dash
+    path: '/dash', 
     name: 'restos',   
     component: Restos,
     meta: {requiresAuth: true}
@@ -68,7 +102,8 @@ const routes = [
     meta: {requiresAuth: true}
   },
   { name: 'utilisateurs', path: '/utilisateurs', component: Utilisateurs},
-  { name: 'login', path: '/login', component: Login },
+  { name: 'login', path: '/dash/login', component: Login },
+  { name: 'logout', path: '/dash/logout', component: Logout },
   {
     name: 'PageNotFound',
     path: '/404',
@@ -86,7 +121,11 @@ const router = VueRouter.createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.meta.requiresAuth && !store.state.user.token){
+  const authStore = useAuthStore()
+  authStore.checkLocalStore()
+
+  if (to.meta.requiresAuth && !authStore.isLoggedIn) //return '/login'
+  {
     next({name: 'login'});
   } else {
     next();

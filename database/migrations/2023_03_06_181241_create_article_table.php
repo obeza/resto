@@ -24,6 +24,7 @@ return new class extends Migration
             $table->decimal('prix')->default(0);
             $table->integer('ordre')->default(0);
             $table->softDeletes();
+            $table->uuid('deleted_by')->nullable();
             $table->timestamps();
         });
     }
