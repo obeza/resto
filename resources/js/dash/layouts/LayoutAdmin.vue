@@ -13,7 +13,7 @@
         </n-layout>        
         <n-layout-footer id="footer">
           footer content
-          <div><router-link to="/login">Login</router-link></div>
+          
         </n-layout-footer>
       </n-layout>
     </n-layout>
@@ -28,3 +28,9 @@ import Sider from './Sider.vue'
 
 console.log('bighead')
 </script>
+<style>
+#footer{
+  height: 80px;
+  background-color: #F8FFDB;
+}
+</style>

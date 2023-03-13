@@ -41,7 +41,7 @@
     
     <div class="draggle" :key="index">
       <div class="spaceIcon">
-        <span class="alignCenter"><n-icon size="30"><ellipsis-vertical/></n-icon> {{  element.titre }} -{{  element.id }}</span>
+        <span class="alignCenter"><n-icon size="30"><ellipsis-vertical/></n-icon> {{  element.titre }}</span>
         <span class="alignCenter">
           <n-button quaternary circle>
       <template #icon>

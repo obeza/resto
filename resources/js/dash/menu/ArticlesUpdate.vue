@@ -71,6 +71,7 @@
           />
         </n-form-item>
 
+        <!-- Upload photo -->
         <n-upload
           :action="`/api/articles/upload/${articleId}`"
           :headers="{
@@ -85,6 +86,7 @@
         Envoyer une photo
         </n-upload>
         <n-divider/>
+        <!-- Upload photo -->
 
         <n-form-item label="Prix" path="prix">
           <n-input-number 
@@ -94,6 +96,7 @@
           />
         </n-form-item>
 
+        <!-- Les des tags -->
         <n-form-item label="Tags" path="tags">
           <n-select 
             v-model:value="formValue.tags"
@@ -101,6 +104,8 @@
             :options="list.options"
           />
         </n-form-item>
+        <!-- /fin Les des tags -->
+
         <n-space>
           <n-button type="info" attr-type="submit">Modifier</n-button>
           <n-button type="warning" @click="showModal=true">Supprimer</n-button>
@@ -190,6 +195,34 @@ const list = ref({
   ]
 })
 
+
+//const tagList = ref([])
+//
+//  récupérer la liste des tags
+//
+
+axiosClient.get( '/tags' ).then( res => {
+console.log("🚀 ~ file: ArticlesUpdate.vue:204 ~ axiosClient.get ~ res:", res.data.tags)
+  let tags = res.data.tags
+  let tagList = <any>[]
+  tags.forEach(el => {
+    tagList.push({
+      label:el.titre,
+      value:el.id
+    })
+  })
+  console.log('tagList.value.options ', tagList)
+  list.value.options = tagList
+
+}).catch( error => {
+  console.log("🚀 ~ file: ArticlesUpdate.vue:209 ~ axiosClient.get ~ error:", error)
+})
+
+
+
+
+
+
 //const baseUrlAction = ref('/api/articles/8/upload')
 
 // get l'article data
@@ -197,6 +230,7 @@ const list = ref({
 console.log(`get -> /rubriques/${rubriqueId}/articles/${articleId}`)
 const baseUrl = `/rubriques/${rubriqueId}/articles/${articleId}`
 const baseUrlAction = ref(baseUrl)
+
 axiosClient.get( baseUrl + '/edit' )
     .then(res => {
       console.log( "data article loaded : " + JSON.stringify(res.data ))
@@ -210,7 +244,7 @@ axiosClient.get( baseUrl + '/edit' )
         id: '1',
         name: 'photo',
         status: 'finished',
-        url: `${BaseUrl}/storage/app/${article.picture}`
+        url: `${window.baseUrl}/storage/app/${article.picture}`
       })
     }
       console.log(`${BaseUrl}/storage/app/${article.picture}`)

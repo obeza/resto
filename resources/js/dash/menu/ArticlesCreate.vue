@@ -19,7 +19,9 @@ const router = useRouter();
 // const {rubriqueId}  = toRefs(props)
 
 const route = useRoute()
-const rubriqueId = ref(route.params.rubriqueId)
+const rubriqueId = route.params.rubriqueId
+console.log("🚀 ~ file: ArticlesCreate.vue:23 ~ rubriqueId:", rubriqueId)
+
 const restoId = ref(route.params.restoId)
 const rubriqueNom = ref(store.state.nav.rubrique)
 
@@ -51,6 +53,23 @@ const list = ref({
     }
     
   ]
+})
+
+axiosClient.get( '/tags' ).then( res => {
+console.log("🚀 ~ res:", res.data.tags)
+  let tags = res.data.tags
+  let tagList = <any>[]
+  tags.forEach(el => {
+    tagList.push({
+      label:el.titre,
+      value:el.id
+    })
+  })
+  console.log('tagList.value.options ', tagList)
+  list.value.options = tagList
+
+}).catch( error => {
+  console.log("🚀 ~ error:", error)
 })
 
 function handleForm (){
@@ -111,7 +130,7 @@ function handleForm (){
   </n-card>
 
   <n-card>
-    <h1>Ajouter un article -{{  rubriqueId }}</h1>
+    <h1>Ajouter un article</h1>
   </n-card>
   <n-card>
   <n-form 

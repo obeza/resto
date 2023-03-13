@@ -8,6 +8,7 @@ use App\Http\Controllers\RestoApiController;
 use App\Http\Controllers\RestoController; 
 use App\Http\Controllers\RubriqueController;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\TagController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,3 +40,6 @@ Route::post('/articles/liste', [ArticleController::class, 'updateListeOrder'])->
 // upload photo pour les articles du menu
 Route::post('/articles/upload/{id}', [ArticleController::class, 'uploadPicture'])->name('articles.upload')->middleware('auth:sanctum');
 Route::post('/articles/upload/{id}/remove', [ArticleController::class, 'uploadPictureRemove'])->middleware('auth:sanctum');
+
+// listes des tags
+Route::get('/tags', [TagController::class, 'index']);

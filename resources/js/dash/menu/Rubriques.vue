@@ -194,7 +194,9 @@ const onPositiveClick = ()=>{
   <n-card>
     <div>
       <form v-on:submit.prevent="addRubrique">
-        <n-input v-model:value="titre" type="text" placeholder="titre de la rubrique"/>
+        <n-form-item label="Ajouter une rubrique">
+          <n-input v-model:value="titre" type="text" placeholder="titre de la rubrique"/>
+        </n-form-item>
       </form>
     </div>
     
@@ -210,7 +212,9 @@ const onPositiveClick = ()=>{
   >
     <n-card>
       <form v-on:submit.prevent="onPositiveClick">
-        <n-input v-model:value="titreAmodifier.titre" type="text"/>
+        
+          <n-input v-model:value="titreAmodifier.titre" type="text"/>
+
       </form>
     </n-card>
   </n-modal>
