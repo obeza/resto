@@ -9,6 +9,8 @@ use App\Http\Controllers\RestoController;
 use App\Http\Controllers\RubriqueController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\ShopController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -43,3 +45,6 @@ Route::post('/articles/upload/{id}/remove', [ArticleController::class, 'uploadPi
 
 // listes des tags
 Route::get('/tags', [TagController::class, 'index']);
+
+// shop
+Route::get('/shop/{resto_id}', [ShopController::class, 'shopData'])->middleware('guest');
